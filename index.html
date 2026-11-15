@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>Inish Khanore Portfolio</title>
+<meta name="description" content="Inish Khanore, physics BS-MS student at IISER Berhampur. Research and builds in NV-centre magnetometry, RF instrumentation, finite-element simulation and optomechanics.">
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo-latin-wdth-normal.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:swap}
+@font-face{font-family:"STIX Two Text";src:url("fonts/stix-two-text-latin-wght-normal.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+@font-face{font-family:"STIX Two Text";src:url("fonts/stix-two-text-latin-wght-italic.woff2") format("woff2");font-weight:400 700;font-style:italic;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+@font-face{font-family:"STIX Two Text";src:url("fonts/stix-two-text-greek-wght-normal.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0370-03FF}
+@font-face{font-family:"STIX Two Text";src:url("fonts/stix-two-text-greek-wght-italic.woff2") format("woff2");font-weight:400 700;font-style:italic;font-display:swap;unicode-range:U+0370-03FF}
+
+:root{
+  /* Layout: a left-aligned page on true black. The matplotlib inferno colormap is the only colour,
+     and it always works as a scale: scroll position on the colorbar at the right edge, probability
+     density, field strength, and where a piece of work sits between understanding and building.
+     Two voices in type: a wide grotesque for the built thing, a journal serif italic for the physics. */
+  --black:#000;
+  --panel:#0b0710;
+  --line:#2c1c35;
+  --line-strong:#4b3558;
+  --text:#f5efe6;
+  --muted:#ada2b5;
+  --hot:#fca50a;
+  --pale:#f6d746;
+  --cool:linear-gradient(90deg,#420a68,#932667 60%,#bc3754);
+  --warm:linear-gradient(90deg,#dd513a,#f37819 45%,#f6d746);
+  --inferno:linear-gradient(90deg,#420a68 0%,#6a176e 14%,#932667 28%,#bc3754 42%,#dd513a 56%,#f37819 70%,#fca50a 84%,#f6d746 100%);
+  --heat:#932667;
+  --font-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-math:"STIX Two Text","STIX Two Math",Cambria,"Times New Roman",serif;
+  --gutter:clamp(20px,5vw,56px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--black);color:var(--text);font:400 1.0625rem/1.6 var(--font-sans);font-stretch:100%;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,canvas{display:block;max-width:100%}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-stretch:114%;letter-spacing:-.012em;line-height:1.08}
+ul,ol{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pale);outline-offset:3px;border-radius:3px}
+::selection{background:#932667;color:#fff}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gutter)}
+.math{font-family:var(--font-math);font-style:italic;font-size:1.06em;letter-spacing:0}
+.math b{font-weight:400;font-style:normal}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+
+/* ---------- nav and scroll scale ---------- */
+.nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px var(--gutter);background:rgba(0,0,0,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.mark{font-weight:750;font-stretch:122%;letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.nav nav{display:flex;gap:clamp(14px,2.4vw,30px);overflow-x:auto;scrollbar-width:none;font-size:.95rem}
+.nav nav::-webkit-scrollbar{display:none}
+.nav nav a{text-decoration:none;color:var(--muted);padding:6px 0;white-space:nowrap;border-bottom:2px solid transparent}
+.nav nav a:hover{color:var(--text)}
+.nav nav a[aria-current="true"]{color:var(--text);border-bottom-color:var(--heat)}
+.progress{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--line)}
+.progress i{display:block;height:100%;background:var(--inferno);transform-origin:0 50%;transform:scaleX(0)}
+.spine{display:none}
+@media (min-width:1280px){
+  .progress i{display:none}
+  .spine{display:block;position:fixed;z-index:25;right:24px;top:50%;height:min(58vh,480px);transform:translateY(-50%);width:8px}
+  .spine-bar{position:absolute;inset:0;border-radius:4px;background:linear-gradient(180deg,#2b0b57 0%,#6a176e 16%,#932667 30%,#bc3754 44%,#dd513a 58%,#f37819 72%,#fca50a 86%,#f6d746 100%)}
+  .spine-mark{position:absolute;left:-7px;right:-7px;top:0;height:3px;margin-top:-1.5px;background:var(--text);border-radius:2px}
+  .spine li{position:absolute;right:18px;transform:translateY(-50%);white-space:nowrap}
+  .spine li::after{content:"";position:absolute;right:-12px;top:50%;width:7px;height:1px;background:var(--line-strong)}
+  .spine a{font-size:.74rem;color:#7d7186;text-decoration:none;font-variant-numeric:tabular-nums}
+  .spine a:hover,.spine a[aria-current="true"]{color:var(--text)}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding-block:clamp(20px,2.4vw,32px) clamp(44px,6vw,80px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+.kicker{color:var(--muted);font-size:1rem}
+.hero h1{font-size:clamp(3.3rem,12.4vw,9.25rem);font-weight:820;font-stretch:125%;line-height:.86;letter-spacing:-.035em;margin-top:.12em}
+.hero h1 span{display:block}
+.tagline{font-family:var(--font-math);font-style:italic;font-size:clamp(1.45rem,2.9vw,2.15rem);line-height:1.2;max-width:19ch;margin-top:.9em;color:var(--pale)}
+.hero-lede{max-width:50ch;margin-top:1.3em;color:var(--text)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.8em}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:6px;border:1px solid var(--line-strong);background:transparent;text-decoration:none;font-weight:600;font-stretch:108%;cursor:pointer}
+.btn:hover{border-color:var(--text)}
+.btn.primary{background:var(--hot);border-color:var(--hot);color:#000}
+.btn.primary:hover{background:var(--pale);border-color:var(--pale)}
+.hero-note{margin-top:1.4em;font-size:.93rem;color:var(--muted);max-width:46ch}
+.hero-note a{color:var(--text);text-underline-offset:3px}
+.orbital{margin:0;min-width:0}
+.orb-stage{position:relative;aspect-ratio:1/1}
+.orb-stage canvas{position:absolute;inset:0;width:100%;height:100%}
+#orb-glow{filter:blur(20px) saturate(1.25);opacity:.85;pointer-events:none}
+#orb{mix-blend-mode:screen;touch-action:pan-y;cursor:grab;border-radius:4px}
+#orb:active{cursor:grabbing}
+.orb-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:6px}
+.stepper{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:6px;padding:3px;background:var(--panel)}
+.stepper .q{width:26px;text-align:center}
+.stepper button{width:34px;height:34px;border:0;border-radius:4px;background:transparent;cursor:pointer;font-size:1.15rem;line-height:1}
+.stepper button:hover:not(:disabled){background:var(--line)}
+.stepper button:disabled{opacity:.28;cursor:default}
+.stepper output{min-width:26px;text-align:center;font-weight:650;font-variant-numeric:tabular-nums}
+.orbital figcaption{margin-top:12px;font-size:.9rem;color:var(--muted);max-width:52ch}
+.orbital figcaption strong{color:var(--text);font-weight:600}
+@media (min-width:980px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr) clamp(440px,44vw,600px);align-items:center;gap:0}
+  .hero-text{position:relative;z-index:2}
+  .orbital{margin-left:-110px}
+  .orb-controls,.orbital figcaption{margin-left:110px}
+}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
+.anchor{scroll-margin-top:84px}
+.rule{border:0;height:1px;background:var(--line);margin:0}
+h2{font-size:clamp(2rem,4.8vw,3.5rem);font-weight:760;font-stretch:120%;letter-spacing:-.025em;max-width:18ch}
+.lede{max-width:62ch;margin-top:1.4em}
+.lede + .lede{margin-top:1em}
+
+/* approach: range chart */
+.spec{position:relative;margin-top:clamp(36px,5vw,64px);--labelw:340px}
+.spec-head,.spec-row{display:grid;grid-template-columns:minmax(0,var(--labelw)) minmax(0,1fr);column-gap:28px}
+.spec-head{align-items:end;padding-bottom:14px}
+.spec-head h3{font-size:1.1rem;font-weight:650}
+.spec-scale{position:relative}
+.spec-ends{display:flex;justify-content:space-between;font-weight:650;font-stretch:112%}
+.spec-line{height:6px;border-radius:3px;background:var(--inferno);margin-top:8px}
+.spec-zones{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8px;font-size:.8rem;color:#7d7186}
+.spec-zones span{transition:color .15s}
+.spec-zones span.on{color:var(--text)}
+.spec-zones span:nth-child(2),.spec-zones span:nth-child(3){text-align:center}
+.spec-zones span:last-child{text-align:right}
+.spec-zones span:nth-child(2){transform:translateX(-12%)}
+.spec-zones span:nth-child(3){transform:translateX(12%)}
+.spec-row{align-items:center;padding:13px 0;border-top:1px solid var(--line);text-decoration:none;transition:opacity .15s}
+.spec-row:last-of-type{border-bottom:1px solid var(--line)}
+.spec-row .name{font-weight:550;line-height:1.3}
+.spec-row:hover .name,.spec-row:focus-visible .name{color:var(--pale)}
+.spec-track{position:relative;height:14px}
+.spec-bar{position:absolute;top:0;bottom:0;left:calc(var(--a)*100%);width:calc((var(--b) - var(--a))*100%);border-radius:7px;background-image:var(--inferno);background-repeat:no-repeat;background-size:calc(100% / (var(--b) - var(--a))) 100%;background-position:calc(var(--a) / (1 - (var(--b) - var(--a))) * 100%) 0}
+.spec.probing .spec-row{opacity:.32}
+.spec.probing .spec-row.hit{opacity:1}
+.spec-probe{position:absolute;top:0;bottom:0;width:1px;background:var(--text);opacity:0;pointer-events:none}
+.spec.probing .spec-probe{opacity:.8}
+.spec-note{margin-top:14px;font-size:.88rem;color:var(--muted)}
+@media (max-width:760px){
+  .spec-head,.spec-row{grid-template-columns:minmax(0,1fr);row-gap:8px}
+  .spec-head h3{margin-bottom:6px}
+}
+
+/* work entries */
+.entry{padding-top:clamp(40px,6vw,72px)}
+.entry + .entry{margin-top:clamp(56px,8vw,104px);border-top:1px solid var(--line)}
+.when{color:var(--hot);font-weight:600;font-variant-numeric:tabular-nums}
+.entry h3{font-size:clamp(1.55rem,3.2vw,2.4rem);font-weight:720;font-stretch:116%;letter-spacing:-.02em;max-width:24ch;margin-top:.35em}
+.who{margin-top:.8em;color:var(--muted);max-width:60ch}
+.part{margin-top:clamp(40px,5vw,64px)}
+.part > h4{font-size:clamp(1.25rem,2.2vw,1.6rem);font-weight:680}
+.halves{display:grid;grid-template-columns:minmax(0,1fr);gap:36px;margin-top:28px}
+@media (min-width:900px){.halves{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px}}
+.half{min-width:0}
+.half > h5{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:.92rem;font-weight:600;font-stretch:108%;color:var(--muted)}
+.half > h5::before{content:"";width:30px;height:4px;border-radius:2px;background:var(--cool)}
+.half.build > h5::before{background:var(--warm)}
+.half p{max-width:58ch}
+.half p + p{margin-top:.9em}
+.bullets{display:grid;gap:11px}
+.bullets li{position:relative;padding-left:20px;max-width:58ch}
+.bullets li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:2px;background:var(--hot)}
+.cite{margin-top:22px;padding:16px 18px;border:1px solid var(--line-strong);border-left:4px solid var(--pale);border-radius:6px;background:var(--panel)}
+.cite strong{display:block;color:var(--pale);font-weight:650;margin-bottom:4px}
+.cite span{font-size:.95rem}
+.links{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:18px}
+.links a{font-weight:600;text-decoration-color:var(--hot);text-underline-offset:4px;text-decoration-thickness:2px}
+.links a:hover{color:var(--pale)}
+
+/* interactive panels */
+.lab{margin-top:22px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:16px}
+.lab-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;margin-bottom:10px}
+.lab-head strong{font-weight:650;font-stretch:108%}
+.lab-head span{font-size:.82rem;color:var(--muted)}
+.lab canvas{width:100%;border-radius:4px;background:#000}
+#odmr-plot{aspect-ratio:16/9}
+#field-plot{aspect-ratio:1/1;cursor:crosshair;touch-action:pan-y}
+#vsm-plot{aspect-ratio:16/10;cursor:crosshair;touch-action:pan-y}
+.ctrl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin-top:12px;font-size:.95rem}
+.ctrl output{min-width:5.2em;text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--inferno)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--inferno)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-7px;border-radius:50%;background:var(--text);border:3px solid #000;box-shadow:0 0 0 1px var(--text)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--text);border:3px solid #000;box-shadow:0 0 0 1px var(--text)}
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px 16px;margin-top:12px}
+.reads div{border-top:1px solid var(--line);padding-top:8px}
+.reads dt{font-size:.8rem;color:var(--muted)}
+.reads dd{margin:2px 0 0;font-weight:650;font-variant-numeric:tabular-nums}
+dl{margin:0}
+.lab-foot{margin-top:12px;font-size:.84rem;color:var(--muted);min-height:2.7em}
+.lab-foot strong{color:var(--text);font-weight:600}
+.legend{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend i{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,#420a68,#6a176e,#932667,#bc3754,#dd513a,#f37819,#fca50a,#f6d746,#fcffa4)}
+
+/* figures */
+.figs{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:22px 14px;margin-top:28px}
+.figs figure{margin:0;grid-column:span 4;min-width:0}
+.figs .s3{grid-column:span 3}
+.figs .s5{grid-column:span 5}
+.figs .s8{grid-column:span 8}
+.zoom{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:4px;background:#000;overflow:hidden;cursor:zoom-in;aspect-ratio:var(--ar,4/3)}
+.zoom:hover{border-color:var(--line-strong)}
+.zoom img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%)}
+.zoom.plot img{object-fit:contain}
+.figs figcaption{margin-top:8px;font-size:.86rem;line-height:1.4;color:var(--muted)}
+@media (max-width:900px){.figs .s3{grid-column:span 6}}
+@media (max-width:640px){
+  .figs figure,.figs .s5,.figs .s8{grid-column:span 12}
+  .figs .s3,.figs .half-sm{grid-column:span 6}
+}
+dialog{padding:0;border:1px solid var(--line-strong);border-radius:8px;background:#000;color:var(--text);max-width:min(1100px,94vw);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.86)}
+dialog .box{display:grid;gap:10px;padding:14px}
+dialog img{max-height:76vh;width:auto;max-width:100%;margin-inline:auto;border-radius:3px}
+dialog .bar{display:flex;justify-content:space-between;align-items:center;gap:16px}
+dialog p{font-size:.92rem;color:var(--muted)}
+
+/* projects */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.tile{padding:0;border:1px solid var(--line);border-radius:6px;background:#000;cursor:pointer;overflow:hidden;text-align:left}
+.tile:hover{border-color:var(--hot)}
+.tile canvas{width:100%;aspect-ratio:1/1}
+.tile span{display:block;padding:8px 10px 10px;font-size:.86rem;font-weight:600;border-top:1px solid var(--line)}
+@media (max-width:520px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.builds{display:grid;gap:0;margin-top:26px;border-top:1px solid var(--line)}
+.builds li{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:8px 28px;padding:18px 0;border-bottom:1px solid var(--line)}
+.builds strong{font-weight:650;font-stretch:108%}
+.builds span{color:var(--muted);max-width:60ch}
+@media (max-width:640px){.builds li{grid-template-columns:minmax(0,1fr)}}
+
+/* toolkit and education */
+.kit{margin-top:36px;border-top:1px solid var(--line)}
+.kit li{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:10px 28px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line)}
+.kit strong{display:flex;align-items:center;gap:10px;font-weight:650;font-stretch:108%}
+.kit strong::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--dot)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{padding:5px 11px;border:1px solid var(--line-strong);border-radius:999px;font-size:.92rem}
+@media (max-width:640px){.kit li{grid-template-columns:minmax(0,1fr)}}
+.edu{margin-top:36px;border-top:1px solid var(--line)}
+.edu li{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:4px 28px;padding:18px 0;border-bottom:1px solid var(--line)}
+.edu .yr{color:var(--hot);font-weight:600;font-variant-numeric:tabular-nums}
+.edu strong{font-weight:650;font-stretch:108%;display:block}
+.edu span{color:var(--muted)}
+@media (max-width:560px){.edu li{grid-template-columns:minmax(0,1fr)}}
+.courses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 56px;margin-top:40px}
+.courses h3{font-size:1.05rem;font-weight:650;margin-bottom:8px}
+.courses p{color:var(--muted);max-width:52ch}
+@media (max-width:760px){.courses{grid-template-columns:minmax(0,1fr)}}
+
+/* contact */
+.contact h2{max-width:20ch}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:36px}
+.mail a{font-size:clamp(1.25rem,3.4vw,2.2rem);font-weight:680;font-stretch:112%;letter-spacing:-.015em;text-decoration-color:var(--hot);text-decoration-thickness:3px;text-underline-offset:6px;overflow-wrap:anywhere}
+.elsewhere{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+footer{padding:28px 0 56px;color:#7d7186;font-size:.86rem}
+footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;border-top:1px solid var(--line);padding-top:20px}
+@media (max-width:520px){
+  .ctrl{grid-template-columns:minmax(0,1fr) auto}
+  .ctrl label{grid-column:1/-1}
+  #odmr-plot,#vsm-plot{aspect-ratio:4/3}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="mark" href="#top">Inish Khanore</a>
+  <nav aria-label="Sections">
+    <a href="#approach">Approach</a>
+    <a href="#research">Research</a>
+    <a href="#projects">Projects</a>
+    <a href="#toolkit">Toolkit</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+</header>
+
+<aside class="spine" aria-label="Position on the page">
+  <div class="spine-bar"><i class="spine-mark" id="spine-mark"></i></div>
+  <ol id="spine-ticks">
+    <li><a href="#top">Intro</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</aside>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<div class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-text">
+      <p class="kicker">Physics BS-MS student at IISER Berhampur</p>
+      <h1><span>Inish</span><span>Khanore</span></h1>
+      <p class="tagline">I like taking ideas from “could this work?” to finding out.</p>
+      <p class="hero-lede">I study physics and I build the apparatus. So far that has meant NV-centre magnetometry, microwave signal generation, finite-element simulation, and the code and hardware that hold an experiment together.</p>
+      <div class="actions">
+        <a class="btn primary" href="#research">See the research</a>
+        <button class="btn" type="button" data-copy="inishy23@iiserbpr.ac.in">Copy email address</button>
+      </div>
+      <p class="hero-note">Abstract accepted at <a href="#fieldmap">COMSOL Conference 2026, Bengaluru</a>, on simulating a bar magnet and validating it with a gaussmeter.</p>
+    </div>
+
+    <figure class="orbital">
+      <div class="orb-stage"><canvas id="orb-glow" aria-hidden="true" width="160" height="160"></canvas>
+      <canvas id="orb" tabindex="0" role="img" aria-label="Rotating point cloud of a hydrogen atomic orbital, coloured by probability density. Drag or use the arrow keys to rotate."></canvas></div>
+      <div class="orb-controls" role="group" aria-label="Choose a hydrogen orbital">
+        <div class="stepper"><span class="q math">n</span><button type="button" data-q="n" data-d="-1" aria-label="Decrease n">−</button><output id="q-n">3</output><button type="button" data-q="n" data-d="1" aria-label="Increase n">+</button></div>
+        <div class="stepper"><span class="q math">l</span><button type="button" data-q="l" data-d="-1" aria-label="Decrease l">−</button><output id="q-l">2</output><button type="button" data-q="l" data-d="1" aria-label="Increase l">+</button></div>
+        <div class="stepper"><span class="q math">m</span><button type="button" data-q="m" data-d="-1" aria-label="Decrease m">−</button><output id="q-m">0</output><button type="button" data-q="m" data-d="1" aria-label="Increase m">+</button></div>
+      </div>
+      <figcaption><strong>Hydrogen <span id="orb-name">3d, m = 0</span>.</strong> 50,000 points drawn from <span class="math">|ψ|²</span> in your browser, using the Monte Carlo method from my Python orbital visualizer. Drag to rotate, or change the quantum numbers.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ================= APPROACH ================= -->
+<section id="approach">
+  <div class="wrap">
+    <h2>I don’t choose between the theory and the hardware.</h2>
+    <p class="lede">Most of my work starts with a system I want to understand and ends with something on a bench that runs. I like meeting an unfamiliar problem from first principles, then moving between theory, experiment, computation and engineering until the idea has been tested.</p>
+    <p class="lede muted">I am most interested in quantum technologies, sensing, photonics, instrumentation and emerging hardware. More broadly, I look for research where there is something interesting to understand and something tangible to build.</p>
+
+    <div class="spec" id="spec">
+      <div class="spec-head">
+        <h3>Where each piece of work sits</h3>
+        <div class="spec-scale" id="spec-scale">
+          <div class="spec-ends"><span>Understand</span><span>Build</span></div>
+          <div class="spec-line"></div>
+          <div class="spec-zones"><span>Theory</span><span>Simulation</span><span>Instrument control</span><span>Hardware</span></div>
+        </div>
+      </div>
+      <a class="spec-row" href="#education" style="--a:0;--b:.24"><span class="name">Coursework in quantum, statistical and condensed matter physics</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#orbital" style="--a:.04;--b:.52"><span class="name">Hydrogen orbital visualizer</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#comsol" style="--a:.26;--b:.56"><span class="name">COMSOL models of coils, dipoles and a four-probe</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#fieldmap" style="--a:.28;--b:.86"><span class="name">Bar magnet field map</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#vsm" style="--a:.22;--b:.94"><span class="name">Vibrating-sample magnetometer</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#odmr" style="--a:.34;--b:.96"><span class="name">NV-centre ODMR automation</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <a class="spec-row" href="#mount" style="--a:.72;--b:1"><span class="name">Lenslet-array mount, quadcopter and Peltier builds</span><span class="spec-track"><i class="spec-bar"></i></span></a>
+      <i class="spec-probe" id="spec-probe"></i>
+      <p class="spec-note">Move across the chart to see what reaches each region. Select a row to go to that work.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ================= RESEARCH ================= -->
+<section id="research">
+  <div class="wrap">
+    <h2>Research</h2>
+
+    <!-- ---- 2026 ---- -->
+    <article class="entry anchor" id="odmr">
+      <p class="when">May to July 2026</p>
+      <h3>Putting an 8.5 GHz signal generator to work in an NV-centre magnetometer</h3>
+      <p class="who">Summer intern with Dr. Phani Peddibhotla, Department of Physics, IISER Bhopal</p>
+
+      <div class="halves">
+        <div class="half physics">
+          <h5>The physics</h5>
+          <p>A nitrogen-vacancy centre in diamond fluoresces a little less when a microwave field hits its spin resonance near 2.87 GHz. A magnetic field along the NV axis splits that resonance in two, and the gap between the dips gives the field. Optically detected magnetic resonance (ODMR) is the sweep that finds them.</p>
+
+          <div class="lab">
+            <div class="lab-head"><strong>Try it: a simulated ODMR sweep</strong><span>Model, not lab data</span></div>
+            <canvas id="odmr-plot" role="img" aria-label="Simulated ODMR spectrum: normalised fluorescence against microwave frequency, with two dips that move apart as the field increases."></canvas>
+            <div class="ctrl">
+              <label for="odmr-b">Field along the NV axis</label>
+              <input type="range" id="odmr-b" min="0" max="9" step="0.05" value="2.95">
+              <output id="odmr-bv" for="odmr-b">2.95 mT</output>
+            </div>
+            <dl class="reads">
+              <div><dt>Lower dip</dt><dd id="odmr-fm">2.787 GHz</dd></div>
+              <div><dt>Upper dip</dt><dd id="odmr-fp">2.953 GHz</dd></div>
+              <div><dt>Splitting</dt><dd id="odmr-split">165 MHz</dd></div>
+              <div><dt>Sweeps averaged</dt><dd id="odmr-n">0</dd></div>
+            </dl>
+            <p class="lab-foot"><span class="math">f<sub>±</sub> = D ± γB</span>, with <span class="math">D</span> = 2.870 GHz and <span class="math">γ</span> = 28.0 GHz/T. Each pass adds noise the way a real sweep does, and averaging pulls the dips out.</p>
+          </div>
+        </div>
+
+        <div class="half build">
+          <h5>The build</h5>
+          <ul class="bullets">
+            <li>Integrated the Zurich Instruments SHFSG+ into the lab’s ODMR workflow, with LabVIEW and LabOne automation and hardware-triggered control.</li>
+            <li>Wrote hardware-timed RF pulse sequences in SeqC: frequency sweeps, deterministic timing, oscillator phase control, and microwave output synchronised with data acquisition.</li>
+            <li>Worked through the RF chain: IQ and single-sideband modulation, synthesizers and upconversion, DAC amplitude, output-power calibration and 50 Ω signal integrity.</li>
+            <li>Routed hardware triggers between the SHFSG+ and an NI USB-6363 DAQ, and tracked down timing and execution-queue synchronisation faults in the control workflow.</li>
+            <li>Ran continuous-wave, stepped and hardware-triggered ODMR to validate the framework across acquisition modes.</li>
+            <li>Wrote the SHFSG+ user manual for the lab, covering operation, LabVIEW and LabOne integration, and troubleshooting, so new members can get started.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="figs">
+        <figure><button class="zoom" type="button" style="--ar:4/3"><img src="img/shfsg-bench.jpg" alt="Zurich Instruments SHFSG+ signal generator on a lab bench beside a spectrum analyser and an oscilloscope" loading="lazy"></button><figcaption>The SHFSG+ with a spectrum analyser and an oscilloscope on its outputs.</figcaption></figure>
+        <figure><button class="zoom plot" type="button" style="--ar:4/3"><img src="img/labview-odmr.jpg" alt="LabVIEW charts of fluorescence against microwave frequency showing two resonance dips" loading="lazy"></button><figcaption>An ODMR sweep on the LabVIEW front panel: two dips, either side of 2.87 GHz.</figcaption></figure>
+        <figure><button class="zoom" type="button" style="--ar:4/3;--pos:50% 62%"><img src="img/odmr-setup.jpg" alt="Optics for the ODMR experiment mounted on an optical table" loading="lazy"></button><figcaption>The ODMR setup on the optical table.</figcaption></figure>
+      </div>
+
+      <div class="part">
+        <h4>Also that summer: Halbach rings in COMSOL</h4>
+        <p class="lede" style="margin-top:.8em">Magnetostatic models of Halbach rings built from 8 or 16 cube magnets, in 10 mm, half-inch and one-inch sizes, comparing the flux density across the bore.</p>
+        <div class="figs">
+          <figure><button class="zoom plot" type="button" style="--ar:3/2"><img src="img/halbach-16.jpg" alt="Simulated flux density of a Halbach ring made of sixteen cube magnets" loading="lazy"></button><figcaption>Sixteen 10 mm cubes. Colour is flux density in tesla.</figcaption></figure>
+          <figure><button class="zoom plot" type="button" style="--ar:3/2"><img src="img/halbach-8.jpg" alt="Simulated flux density of a Halbach ring made of eight half-inch cube magnets" loading="lazy"></button><figcaption>Eight half-inch cubes on a 60 mm ring.</figcaption></figure>
+          <figure><button class="zoom plot" type="button" style="--ar:3/2"><img src="img/halbach-8-large.jpg" alt="Simulated flux density of a Halbach ring made of eight one-inch cube magnets" loading="lazy"></button><figcaption>Eight one-inch cubes on a 120 mm ring.</figcaption></figure>
+        </div>
+      </div>
+    </article>
+
+    <!-- ---- 2025 ---- -->
+    <article class="entry">
+      <p class="when">May to July 2025</p>
+      <h3>A measured field map, a set of finite-element models, and a magnetometer built around a speaker</h3>
+      <p class="who">Summer intern with Dr. Kuntal Roy, Department of EECS, IISER Bhopal</p>
+
+      <div class="part anchor" id="fieldmap">
+        <h4>Mapping the field of a bar magnet</h4>
+        <div class="halves">
+          <div class="half physics">
+            <h5>The physics</h5>
+            <p>The field of a permanent magnet is a magnetostatics problem, so it can be solved numerically. I modelled the magnet in COMSOL, then checked the model against the real one with a Hall probe.</p>
+            <div class="cite">
+              <strong>Abstract accepted</strong>
+              <span>Khanore, I. (2026). COMSOL Magnetostatic Simulation of a Permanent Bar Magnet with Gaussmeter Validation. COMSOL Conference 2026 Bengaluru, India, December 2026.</span>
+            </div>
+            <div class="figs">
+              <figure class="half-sm" style="grid-column:span 6"><button class="zoom plot" type="button" style="--ar:1/1"><img src="img/comsol-magnet.jpg" alt="COMSOL simulation of a bar magnet with field lines looping from one end to the other" loading="lazy"></button><figcaption>The COMSOL model of the magnet.</figcaption></figure>
+              <figure class="half-sm" style="grid-column:span 6"><button class="zoom" type="button" style="--ar:1/1"><img src="img/magnet-on-comsol.jpg" alt="A red Eclipse bar magnet resting on a printout of its simulated field lines" loading="lazy"></button><figcaption>The real magnet on a printout of its simulated field.</figcaption></figure>
+              <figure style="grid-column:span 12"><button class="zoom" type="button" style="--ar:16/9;--pos:50% 55%"><img src="img/gauss-probe.jpg" alt="Hall probe held in a rotary mount on an optical breadboard, next to a translation stage and a red bar magnet" loading="lazy"></button><figcaption>The Hall probe on its rotary mount, beside the translation stage and the magnet.</figcaption></figure>
+            </div>
+          </div>
+          <div class="half build">
+            <h5>The build</h5>
+            <p>I automated the gauss probe in LabVIEW and mapped the field point by point. Each of the 90 readings is a position, an angle and a field strength.</p>
+            <div class="lab">
+              <div class="lab-head"><strong>The measured field</strong><span>90 gaussmeter readings</span></div>
+              <canvas id="field-plot" role="img" aria-label="Measured magnetic field around a bar magnet: 90 ticks on a grid, each lying along the field at that point and coloured by field strength."></canvas>
+              <div class="legend"><span>3 mT</span><i></i><span>53 mT</span></div>
+              <p class="lab-foot" id="field-read">Each tick lies along the field at that point, and its colour is the field strength on a log scale. Hover or tap one to read it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="part anchor" id="vsm">
+        <h4>A vibrating-sample magnetometer, as a proof of concept</h4>
+        <div class="halves">
+          <div class="half physics">
+            <h5>The physics</h5>
+            <p>A vibrating-sample magnetometer measures a sample’s magnetic moment by shaking it in a uniform field. The moving moment induces a voltage in a nearby pickup coil at the vibration frequency, and a lock-in amplifier pulls that signal out of the noise.</p>
+            <div class="lab">
+              <div class="lab-head"><strong>What the lock-in saw</strong><span>36 readings from the bench</span></div>
+              <canvas id="vsm-plot" role="img" aria-label="Measured lock-in signal in millivolts against drive frequency from 10 to 3000 hertz, rising with frequency with spikes near 90 and 450 hertz."></canvas>
+              <p class="lab-foot" id="vsm-read">The signal at the vibration frequency rises with drive frequency. The spikes are stray pickup. Hover or tap for values.</p>
+            </div>
+          </div>
+          <div class="half build">
+            <h5>The build</h5>
+            <ul class="bullets">
+              <li>A Helmholtz-coil electromagnet for the uniform field, matched against a Lakeshore 410 gaussmeter.</li>
+              <li>A 4 Ω, 5 W speaker to vibrate the sample, driven from a signal generator.</li>
+              <li>A 200-turn air-core pickup coil wound from 27-gauge enamelled copper wire.</li>
+              <li>A sample cut from an old hard-disk platter and magnetised in an external field.</li>
+              <li>An SR830 lock-in amplifier, with a LabVIEW program that steps the drive frequency and logs the amplitude.</li>
+            </ul>
+            <p style="margin-top:1.1em">The lock-in detected a voltage induced at the sample’s vibration frequency, with some noise at grid frequencies. There was more to refine than the internship had time for.</p>
+          </div>
+        </div>
+        <div class="figs">
+          <figure class="s8"><button class="zoom" type="button" style="--ar:2/1"><img src="img/vsm-bench.jpg" alt="Lab bench with a coil electromagnet, oscilloscope, power supplies and a lock-in amplifier wired together" loading="lazy"></button><figcaption>The full setup: electromagnet, drive electronics and lock-in.</figcaption></figure>
+          <figure><button class="zoom" type="button" style="--ar:1/1;--pos:50% 30%"><img src="img/vsm-rig.jpg" alt="A speaker held on a stand above a rod that carries the sample down to a small copper coil" loading="lazy"></button><figcaption>Speaker on top, sample rod, pickup coil below.</figcaption></figure>
+          <figure class="half-sm"><button class="zoom" type="button" style="--ar:4/3"><img src="img/sensing-coil.jpg" alt="Small hand-wound copper coil on a printed bobbin" loading="lazy"></button><figcaption>The pickup coil.</figcaption></figure>
+          <figure class="half-sm"><button class="zoom" type="button" style="--ar:4/3"><img src="img/harddisk-sample.jpg" alt="Plastic box labelled old hard disk samples holding cut pieces of platter" loading="lazy"></button><figcaption>Samples cut from a hard-disk platter.</figcaption></figure>
+          <figure><button class="zoom" type="button" style="--ar:4/3;--pos:50% 45%"><img src="img/speaker.jpg" alt="Close view of a loudspeaker cone" loading="lazy"></button><figcaption>The speaker that does the vibrating.</figcaption></figure>
+        </div>
+      </div>
+
+      <div class="part anchor" id="comsol">
+        <h4>Finite-element models and instrument panels</h4>
+        <div class="halves">
+          <div class="half physics">
+            <h5>The physics</h5>
+            <p>I built COMSOL models of current-carrying Helmholtz coils, checked against the analytic field, of a magnetic dipole oscillating in a uniform field, and of the potential gradient in a four-probe measurement.</p>
+          </div>
+          <div class="half build">
+            <h5>The build</h5>
+            <p>I made a LabVIEW front panel for the SR830 lock-in amplifier, together with Sarthak from NIT Andhra, and read the Lakeshore 410 gauss probe from LabVIEW, so that acquisition and parameter control ran from one place.</p>
+          </div>
+        </div>
+        <div class="figs">
+          <figure class="s3"><button class="zoom plot" type="button" style="--ar:1/1"><img src="img/helmholtz.jpg" alt="Simulated magnetic field between a pair of Helmholtz coils" loading="lazy"></button><figcaption>Helmholtz coils.</figcaption></figure>
+          <figure class="s3"><button class="zoom plot" type="button" style="--ar:1/1"><img src="img/fourprobe-3d.jpg" alt="Simulated electric field norm in a slab contacted by four probes" loading="lazy"></button><figcaption>Four-probe: electric field norm.</figcaption></figure>
+          <figure class="s3"><button class="zoom plot" type="button" style="--ar:1/1"><img src="img/fourprobe-contour.jpg" alt="Equipotential contours between two current probes seen from above" loading="lazy"></button><figcaption>Four-probe: equipotential lines from above.</figcaption></figure>
+          <figure class="s3"><button class="zoom" type="button" style="--ar:1/1"><img src="img/lakeshore-410.jpg" alt="Lakeshore 410 gaussmeter in its case with a Hall probe" loading="lazy"></button><figcaption>The Lakeshore 410 gaussmeter.</figcaption></figure>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="wrap">
+    <h2>Projects</h2>
+
+    <article class="entry anchor" id="orbital">
+      <p class="when">February to March 2026</p>
+      <h3>Hydrogen orbital visualizer</h3>
+      <div class="halves">
+        <div class="half physics">
+          <h5>The physics</h5>
+          <p>The quantum numbers <span class="math">n</span>, <span class="math">l</span> and <span class="math">m</span> set an orbital’s energy and shape. Solving the Schrödinger equation for hydrogen gives the wavefunction <span class="math">ψ</span> as a radial part times a spherical harmonic.</p>
+          <p style="margin-top:1.4em" class="muted">Pick one to load it into the cloud at the top of the page.</p>
+          <div class="tiles" id="tiles">
+            <button class="tile" type="button" data-n="2" data-l="1" data-m="0"><canvas role="img" aria-label="2p orbital"></canvas><span>2p, m = 0</span></button>
+            <button class="tile" type="button" data-n="3" data-l="2" data-m="1"><canvas role="img" aria-label="3d orbital"></canvas><span>3d, m = 1</span></button>
+            <button class="tile" type="button" data-n="4" data-l="3" data-m="0"><canvas role="img" aria-label="4f orbital"></canvas><span>4f, m = 0</span></button>
+            <button class="tile" type="button" data-n="5" data-l="3" data-m="2"><canvas role="img" aria-label="5f orbital"></canvas><span>5f, m = 2</span></button>
+          </div>
+        </div>
+        <div class="half build">
+          <h5>The build</h5>
+          <p>A Python script, using NumPy, SciPy and Matplotlib, draws 50,000 coordinates by Monte Carlo sampling weighted by <span class="math">|ψ|²</span> and renders them as a 3D point cloud. The inferno colormap makes the likeliest regions glow brightest.</p>
+          <p>It began as a Python port inspired by kavan010/Atoms. The cloud at the top of this page uses the same method, rewritten to run in the browser.</p>
+          <div class="links"><a href="https://github.com/inishkhanore/Quantum-orbital-visualizer" target="_blank" rel="noopener">Code on GitHub</a></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry anchor" id="mount">
+      <p class="when">January 2026</p>
+      <h3>Two-axis optical mount for aligning a lenslet array</h3>
+      <div class="halves">
+        <div class="half physics">
+          <h5>The physics</h5>
+          <p>A Shack–Hartmann wavefront sensor only works when its lenslet array is in focus and aligned in angle with the camera behind it. That needs two fine, repeatable adjustments that stay put once set.</p>
+        </div>
+        <div class="half build">
+          <h5>The build</h5>
+          <p>I designed and 3D printed a compact optomechanical mount with two independent degrees of freedom: linear translation for focus and rotation for angular alignment. It fits C-mount (1.00-32 TPI) optics, locks after alignment, and suits CCD camera assemblies in optical and photonic setups.</p>
+          <div class="links">
+            <a href="https://youtu.be/0Xps5WxF2_o" target="_blank" rel="noopener">Watch the draft video</a>
+            <a href="https://grabcad.com/inish.khanore-2" target="_blank" rel="noopener">CAD on GrabCAD</a>
+          </div>
+        </div>
+      </div>
+      <div class="figs">
+        <figure class="s5"><button class="zoom plot" type="button" style="--ar:5/3"><img src="img/mount-cad.jpg" alt="CAD model of a cylindrical optical mount with a threaded collar and a rotating section" loading="lazy"></button><figcaption>The CAD model.</figcaption></figure>
+        <figure><button class="zoom plot" type="button" style="--ar:4/3"><img src="img/mount-drawing.jpg" alt="Engineering drawing of the mount" loading="lazy"></button><figcaption>The drawing sheet.</figcaption></figure>
+        <figure class="s3"><button class="zoom" type="button" style="--ar:1/1;--pos:50% 55%"><img src="img/mount-printed.jpg" alt="The printed mount in orange plastic standing on a desk" loading="lazy"></button><figcaption>Printed.</figcaption></figure>
+      </div>
+    </article>
+
+    <article class="entry">
+      <h3>Smaller builds</h3>
+      <ul class="builds">
+        <li><strong>Peltier coolers</strong><span>A dehumidifier, a portable cooler for harvest in remote North Eastern regions, and a thermostat that briefly freezes <i>Drosophila melanogaster</i> to anaesthetise them.</span></li>
+        <li><strong>Pixhawk quadcopter</strong><span>Assembled and integrated with its motors, ESCs and power distribution, for the institute’s tech club.</span></li>
+        <li><strong>Translucent display</strong><span>A scrap Dell monitor with the backlight removed, reused as a see-through screen in my dorm room.</span></li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ================= TOOLKIT ================= -->
+<section id="toolkit">
+  <div class="wrap">
+    <h2>Toolkit</h2>
+    <ul class="kit">
+      <li style="--dot:#932667"><strong>Simulation</strong><div class="chips"><span>COMSOL</span><span>Finite-element modelling</span><span>Experimental data analysis</span></div></li>
+      <li style="--dot:#bc3754"><strong>Programming</strong><div class="chips"><span>Python</span><span>MATLAB</span><span>LabVIEW</span><span>LabOne API</span></div></li>
+      <li style="--dot:#dd513a"><strong>Instrumentation</strong><div class="chips"><span>LabVIEW</span><span>Zurich Instruments LabOne</span><span>SHFSG+ 8.5 GHz</span><span>SR830 lock-in amplifier</span><span>Lakeshore 410</span></div></li>
+      <li style="--dot:#f37819"><strong>Electronics</strong><div class="chips"><span>STM32</span><span>Arduino</span><span>Raspberry Pi Pico</span><span>Embedded systems</span></div></li>
+      <li style="--dot:#f6d746"><strong>Rapid prototyping</strong><div class="chips"><span>Autodesk Fusion 360</span><span>3D printing</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ================= EDUCATION ================= -->
+<section id="education">
+  <div class="wrap">
+    <h2>Education</h2>
+    <ul class="edu">
+      <li><span class="yr">2023 to 2028</span><div><strong>Integrated BS-MS in Physics</strong><span>IISER Berhampur, Odisha</span></div></li>
+      <li><span class="yr">2021 to 2023</span><div><strong>Senior secondary, HSC</strong><span>SPPAC Junior College, Nashik, Maharashtra</span></div></li>
+      <li><span class="yr">2020 to 2021</span><div><strong>High school, CBSE</strong><span>GEMS English Medium School, Nashik, Maharashtra</span></div></li>
+    </ul>
+    <div class="courses">
+      <div><h3>Theoretical physics</h3><p>Classical Mechanics, Electromagnetism, Waves and Introductory Optics, Quantum Physics, Quantum Mechanics I and II, Statistical Mechanics, Electrodynamics and Special Theory of Relativity, Condensed Matter Physics</p></div>
+      <div><h3>Experimental physics</h3><p>General Physics Laboratory I to III, Physics Laboratory I and II, Condensed Matter Physics Laboratory</p></div>
+      <div><h3>Mathematical physics</h3><p>Mathematical Methods, Mathematical Methods I and II, Calculus of One Variable, Linear Algebra, Multivariable Calculus</p></div>
+      <div><h3>Electives</h3><p>Thermal Physics, Waves and Optics, Spintronics, Quantum Information Theory</p></div>
+    </div>
+    <div class="links" style="margin-top:32px"><a href="https://www.iiserbpr.ac.in/academics/files/PHYSICS_BSMS.pdf" target="_blank" rel="noopener">IISER Berhampur BS-MS physics curriculum</a></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Have something to understand and something to build? Write to me.</h2>
+    <div class="mail">
+      <a href="mailto:inishy23@iiserbpr.ac.in">inishy23@iiserbpr.ac.in</a>
+      <button class="btn" type="button" data-copy="inishy23@iiserbpr.ac.in">Copy</button>
+    </div>
+    <div class="elsewhere">
+      <a class="btn" href="https://github.com/inishkhanore" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/inish-khanore-a43b73287/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://grabcad.com/inish.khanore-2" target="_blank" rel="noopener">GrabCAD</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot"><span>Inish Khanore</span><span>Last updated November 2026</span></div></div>
+</footer>
+
+<dialog id="lightbox" aria-label="Enlarged image">
+  <div class="box">
+    <img src="" alt="">
+    <div class="bar"><p></p><button class="btn close" type="button">Close</button></div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- inferno colormap (matplotlib, 11 stops) ---------- */
+const STOPS = [[0,0,4],[22,11,57],[66,10,104],[106,23,110],[147,38,103],[188,55,84],[221,81,58],[243,120,25],[252,165,10],[246,215,70],[252,255,164]];
+function inferno(t){
+  t = t < 0 ? 0 : t > 1 ? 1 : t;
+  const x = t * 10, i = Math.min(9, x | 0), f = x - i, a = STOPS[i], b = STOPS[i + 1];
+  return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+}
+const rgb = t => { const c = inferno(t); return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; };
+
+function fit(cv){
+  const r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+  const W = Math.max(1, Math.round(r.width * d)), H = Math.max(1, Math.round(r.height * d));
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+const FONT = '500 12px Archivo, "Helvetica Neue", Arial, sans-serif';
+const INK = '#f5efe6', DIM = '#ada2b5', GRID = '#2c1c35';
+
+/* ---------- hydrogen wavefunctions ---------- */
+function fact(n){ let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; }
+function makeR(n, l){
+  const k = n - l - 1, a = 2 * l + 1;
+  const N = Math.sqrt(Math.pow(2 / n, 3) * fact(k) / (2 * n * fact(n + l)));
+  return r => {
+    const x = 2 * r / n;
+    let L0 = 1, L1 = 1 + a - x;
+    if (k === 0) L1 = 1;
+    for (let i = 1; i < k; i++) { const L2 = ((2 * i + 1 + a - x) * L1 - (i + a) * L0) / (i + 1); L0 = L1; L1 = L2; }
+    return N * Math.exp(-x / 2) * Math.pow(x, l) * L1;
+  };
+}
+function legendre(l, m, x){
+  let pmm = 1;
+  if (m > 0) { const s = Math.sqrt((1 - x) * (1 + x)); let f = 1; for (let i = 1; i <= m; i++) { pmm *= -f * s; f += 2; } }
+  if (l === m) return pmm;
+  let pm1 = x * (2 * m + 1) * pmm;
+  if (l === m + 1) return pm1;
+  let pl = 0;
+  for (let k = m + 2; k <= l; k++) { pl = (x * (2 * k - 1) * pm1 - (k + m - 1) * pmm) / (k - m); pmm = pm1; pm1 = pl; }
+  return pl;
+}
+function makeY(l, m){            // real spherical harmonics
+  const am = Math.abs(m);
+  const N = Math.sqrt((2 * l + 1) / (4 * Math.PI) * fact(l - am) / fact(l + am)) * (m === 0 ? 1 : Math.SQRT2);
+  return (ct, ph) => N * legendre(l, am, ct) * (m === 0 ? 1 : m > 0 ? Math.cos(am * ph) : Math.sin(am * ph));
+}
+function sampleOrbital(n, l, m, count){
+  const R = makeR(n, l), Y = makeY(l, m);
+  const rmax = 2.4 * n * n + 6 * n + 4, G = 1536, dr = rmax / G;
+  const cdf = new Float64Array(G + 1);
+  let tot = 0;
+  for (let i = 1; i <= G; i++) { const r = (i - 0.5) * dr, v = R(r); tot += r * r * v * v; cdf[i] = tot; }
+  let ext = rmax;
+  for (let i = 1; i <= G; i++) if (cdf[i] >= 0.985 * tot) { ext = i * dr; break; }
+  let ymax = 0;
+  for (let i = 0; i <= 60; i++) { const ct = -1 + 2 * i / 60; for (let j = 0; j < 96; j++) { const y = Y(ct, 2 * Math.PI * j / 96); if (y * y > ymax) ymax = y * y; } }
+  ymax *= 1.03;
+  const pts = new Float32Array(count * 3), w = new Float32Array(count), dens = new Float32Array(count);
+  let dmax = 0;
+  for (let k = 0; k < count; k++) {
+    const u = Math.random() * tot;
+    let lo = 0, hi = G;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (cdf[mid] < u) lo = mid; else hi = mid; }
+    const r = (lo + (u - cdf[lo]) / ((cdf[hi] - cdf[lo]) || 1)) * dr;
+    let ct, ph, y;
+    do { ct = 2 * Math.random() - 1; ph = 2 * Math.PI * Math.random(); y = Y(ct, ph); } while (Math.random() * ymax > y * y);
+    const st = Math.sqrt(1 - ct * ct), v = R(r);
+    pts[3 * k] = r * st * Math.cos(ph) / ext;      // quantisation axis drawn vertically
+    pts[3 * k + 1] = r * ct / ext;
+    pts[3 * k + 2] = r * st * Math.sin(ph) / ext;
+    const d = v * v * y * y; dens[k] = d; if (d > dmax) dmax = d;
+  }
+  for (let k = 0; k < count; k++) w[k] = 0.3 + 0.7 * Math.sqrt(dens[k] / dmax);
+  return { pts, w };
+}
+
+/* ---------- density renderer: splat points, tone-map through inferno ---------- */
+const LUTN = 1024, LUT = new Uint32Array(LUTN);
+for (let i = 1; i < LUTN; i++) {
+  const t = 1 - Math.exp(-3.4 * i / (LUTN - 1));
+  const c = inferno(0.15 + 0.85 * Math.pow(t, 0.8));
+  LUT[i] = (255 << 24) | ((c[2] | 0) << 16) | ((c[1] | 0) << 8) | (c[0] | 0);
+}
+const BLACK = 0xff000000;
+class Cloud {
+  constructor(cv, maxPx){ this.cv = cv; this.ctx = cv.getContext('2d'); this.maxPx = maxPx || 820; this.yaw = 0.55; this.pitch = 0.3; this.tilt = 0.5; this.fade = 1; this.data = null; this.k = 1; }
+  resize(){
+    const r = this.cv.getBoundingClientRect();
+    if (!r.width) return false;
+    const s = Math.min(window.devicePixelRatio || 1, 1.5);
+    const W = Math.max(64, Math.min(this.maxPx, Math.round(r.width * s))), H = Math.max(64, Math.min(this.maxPx, Math.round(r.height * s)));
+    if (W !== this.W || H !== this.H) {
+      this.W = W; this.H = H; this.cv.width = W; this.cv.height = H;
+      this.acc = new Float32Array(W * H);
+      this.img = this.ctx.createImageData(W, H);
+      this.out = new Uint32Array(this.img.data.buffer);
+      this.calibrate();
+    }
+    return true;
+  }
+  set(data){ this.data = data; this.calibrate(); }
+  splat(yaw, pitch){
+    const W = this.W, H = this.H, acc = this.acc; acc.fill(0);
+    const p = this.data.pts, w = this.data.w, n = w.length;
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const ct = Math.cos(this.tilt), st = Math.sin(this.tilt);   // lean the quantisation axis so the spin shows
+    const R = Math.min(W, H) * 0.43, cx = W / 2, cz = H / 2;
+    for (let i = 0, j = 0; i < n; i++, j += 3) {
+      const x = p[j] * ct - p[j + 1] * st, y = p[j] * st + p[j + 1] * ct, z = p[j + 2];
+      const x1 = x * cy + z * sy, z1 = z * cy - x * sy;
+      const y1 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
+      const ps = 1 / (1 - 0.16 * z2);
+      const fx = cx + x1 * R * ps, fy = cz - y1 * R * ps;
+      const ix = Math.floor(fx), iy = Math.floor(fy);
+      if (ix < 0 || iy < 0 || ix >= W - 1 || iy >= H - 1) continue;
+      const tx = fx - ix, ty = fy - iy, wt = w[i] * (1 + 0.3 * z2), o = iy * W + ix;
+      acc[o] += wt * (1 - tx) * (1 - ty); acc[o + 1] += wt * tx * (1 - ty);
+      acc[o + W] += wt * (1 - tx) * ty; acc[o + W + 1] += wt * tx * ty;
+    }
+  }
+  calibrate(){
+    if (!this.data || !this.acc) return;
+    const peaks = [];
+    for (const a of [0.2, 1.1, 2.0, 2.9, 3.8]) {
+      this.splat(a, 0.3);
+      let m = 0; const acc = this.acc;
+      for (let i = 0; i < acc.length; i++) if (acc[i] > m) m = acc[i];
+      peaks.push(m);
+    }
+    peaks.sort((a, b) => a - b);
+    this.k = (LUTN - 1) / (peaks[2] || 1);
+  }
+  draw(){
+    if (!this.data || !this.acc) return;
+    this.splat(this.yaw, this.pitch);
+    const acc = this.acc, out = this.out, k = this.k * this.fade, top = LUTN - 1;
+    for (let i = 0; i < acc.length; i++) {
+      const a = acc[i];
+      if (a === 0) { out[i] = BLACK; continue; }
+      let q = (a * k) | 0;
+      if (q > top) q = top; else if (q < 1) q = 1;
+      out[i] = LUT[q];
+    }
+    this.ctx.putImageData(this.img, 0, 0);
+  }
+}
+
+/* ---------- hero orbital ---------- */
+const hero = (() => {
+  const cv = $('#orb'); if (!cv) return null;
+  const cloud = new Cloud(cv, 820);
+  const gcv = $('#orb-glow'), glow = gcv ? gcv.getContext('2d') : null;
+  const q = { n: 3, l: 2, m: 0 };
+  let visible = true, dragging = false, lastX = 0, lastY = 0, vel = 0, raf = 0, last = 0, born = 0;
+  const BASE = 0.22;                       // rad per second
+  const name = () => q.n + 'spdfg'[q.l] + (q.l ? ', m = ' + (q.m < 0 ? '−' + (-q.m) : q.m) : '');
+  function ui(){
+    $('#q-n').textContent = q.n; $('#q-l').textContent = q.l; $('#q-m').textContent = q.m < 0 ? '−' + (-q.m) : q.m;
+    $('#orb-name').textContent = name();
+    $$('.stepper button').forEach(b => {
+      const d = +b.dataset.d, k = b.dataset.q;
+      b.disabled = k === 'n' ? (d < 0 ? q.n <= 1 : q.n >= 5) : k === 'l' ? (d < 0 ? q.l <= 0 : q.l >= q.n - 1) : (d < 0 ? q.m <= -q.l : q.m >= q.l);
+    });
+  }
+  function load(){ cloud.set(sampleOrbital(q.n, q.l, q.m, 50000)); born = performance.now(); ui(); kick(); }
+  function set(n, l, m){ q.n = n; q.l = Math.min(l, n - 1); q.m = Math.max(-q.l, Math.min(q.l, m)); load(); }
+  function frame(t){
+    raf = 0;
+    const dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
+    if (!dragging) { vel += (BASE * (reduce ? 0 : 1) - vel) * Math.min(1, dt * 2.2); cloud.yaw += vel * dt; }
+    const age = (t - born) / 1300;
+    cloud.fade = reduce ? 1 : age >= 1 ? 1 : 0.02 + 0.98 * age * age * (3 - 2 * age);
+    cloud.draw();
+    if (glow) glow.drawImage(cv, 0, 0, 160, 160);
+    if (visible && !document.hidden && (!reduce || dragging || age < 1 || Math.abs(vel) > 0.01)) kick();
+  }
+  function kick(){ if (!raf) raf = requestAnimationFrame(frame); }
+  $$('.stepper button').forEach(b => b.addEventListener('click', () => {
+    const d = +b.dataset.d, k = b.dataset.q;
+    if (k === 'n') set(q.n + d, q.l, q.m); else if (k === 'l') set(q.n, q.l + d, q.m); else set(q.n, q.l, q.m + d);
+  }));
+  cv.addEventListener('pointerdown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; vel = 0; try { cv.setPointerCapture(e.pointerId); } catch (_) {} kick(); });
+  cv.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
+    cloud.yaw += dx * 0.009; cloud.pitch = Math.max(-1.45, Math.min(1.45, cloud.pitch + dy * 0.009));
+    vel = dx * 0.5; kick();
+  });
+  const end = () => { dragging = false; kick(); };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('keydown', e => {
+    const s = 0.12;
+    if (e.key === 'ArrowLeft') cloud.yaw -= s; else if (e.key === 'ArrowRight') cloud.yaw += s;
+    else if (e.key === 'ArrowUp') cloud.pitch = Math.max(-1.45, cloud.pitch - s); else if (e.key === 'ArrowDown') cloud.pitch = Math.min(1.45, cloud.pitch + s);
+    else return;
+    e.preventDefault(); kick();
+  });
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
+  new ResizeObserver(() => { if (cloud.resize()) kick(); }).observe(cv);
+  cloud.resize(); load();
+  return { set, focus: () => cv.focus({ preventScroll: true }) };
+})();
+
+/* ---------- orbital tiles ---------- */
+(() => {
+  const tiles = $$('#tiles .tile'); if (!tiles.length) return;
+  const made = new Map();
+  const paint = t => {
+    let c = made.get(t);
+    if (!c) { c = new Cloud($('canvas', t), 300); c.yaw = 0.7; c.pitch = 0.42; made.set(t, c); c.resize(); c.set(sampleOrbital(+t.dataset.n, +t.dataset.l, +t.dataset.m, 24000)); }
+    else c.resize();
+    c.draw();
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { paint(e.target); io.unobserve(e.target); } }), { rootMargin: '300px' });
+  tiles.forEach(t => {
+    io.observe(t);
+    t.addEventListener('click', () => {
+      if (hero) hero.set(+t.dataset.n, +t.dataset.l, +t.dataset.m);
+      $('#top').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      if (hero) hero.focus();
+    });
+  });
+  let rz = 0;
+  addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => made.forEach((c, t) => paint(t)), 200); });
+})();
+
+/* ---------- approach: understand / build range chart ---------- */
+(() => {
+  const spec = $('#spec'); if (!spec) return;
+  const scale = $('#spec-scale'), probe = $('#spec-probe'), zones = $$('.spec-zones span', spec);
+  const rows = $$('.spec-row', spec).map(el => ({ el, a: parseFloat(el.style.getPropertyValue('--a')), b: parseFloat(el.style.getPropertyValue('--b')) }));
+  const clear = () => { spec.classList.remove('probing'); rows.forEach(r => r.el.classList.remove('hit')); zones.forEach(z => z.classList.remove('on')); };
+  spec.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    const s = scale.getBoundingClientRect(), box = spec.getBoundingClientRect();
+    const t = (e.clientX - s.left) / s.width;
+    if (t < 0 || t > 1) { clear(); return; }
+    spec.classList.add('probing');
+    probe.style.left = (e.clientX - box.left) + 'px';
+    rows.forEach(r => r.el.classList.toggle('hit', t >= r.a && t <= r.b));
+    zones.forEach((z, i) => z.classList.toggle('on', Math.min(3, (t * 4) | 0) === i));
+  });
+  spec.addEventListener('pointerleave', clear);
+})();
+
+/* ---------- ODMR model ---------- */
+(() => {
+  const cv = $('#odmr-plot'); if (!cv) return;
+  const slider = $('#odmr-b');
+  const F0 = 2.60, F1 = 3.14, N = 181, D = 2.870, GAM = 0.028025, WD = 0.014, C = 0.085, Y0 = 0.80, Y1 = 1.035;
+  let B = +slider.value, idx = 0, sweeps = 0, visible = false, raf = 0;
+  const avg = new Float32Array(N), cnt = new Uint16Array(N);
+  const model = f => { const a = (f - (D - GAM * B)) / (WD / 2), b = (f - (D + GAM * B)) / (WD / 2); return 1 - C * (1 / (1 + a * a) + 1 / (1 + b * b)); };
+  const noise = () => { let u = 0; for (let i = 0; i < 6; i++) u += Math.random(); return (u - 3) * 1.414; };
+  const fOf = i => F0 + (F1 - F0) * i / (N - 1);
+  function acquire(k){
+    for (let s = 0; s < k; s++) {
+      const v = model(fOf(idx)) + 0.013 * noise(), c = cnt[idx];
+      avg[idx] = (avg[idx] * c + v) / (c + 1); if (c < 300) cnt[idx] = c + 1;
+      if (++idx >= N) { idx = 0; sweeps++; }
+    }
+  }
+  function reset(){ avg.fill(0); cnt.fill(0); idx = 0; sweeps = 0; }
+  function still(){ for (let i = 0; i < N; i++) { avg[i] = model(fOf(i)) + 0.0025 * noise(); cnt[i] = 30; } sweeps = 30; idx = 0; }
+  function reads(){
+    const fm = D - GAM * B, fp = D + GAM * B;
+    $('#odmr-bv').textContent = B.toFixed(2) + ' mT';
+    $('#odmr-fm').textContent = fm.toFixed(3) + ' GHz';
+    $('#odmr-fp').textContent = fp.toFixed(3) + ' GHz';
+    $('#odmr-split').textContent = Math.round(2 * GAM * B * 1000) + ' MHz';
+    $('#odmr-n').textContent = sweeps;
+  }
+  function draw(){
+    const { ctx, w, h } = fit(cv);
+    const L = 44, R = 14, T = 28, Bm = 28, pw = w - L - R, ph = h - T - Bm;
+    const X = f => L + (f - F0) / (F1 - F0) * pw, Yp = v => T + (Y1 - v) / (Y1 - Y0) * ph;
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = FONT; ctx.lineWidth = 1; ctx.textBaseline = 'middle';
+    ctx.strokeStyle = GRID; ctx.fillStyle = DIM; ctx.textAlign = 'right';
+    for (const v of [0.85, 0.90, 0.95, 1.0]) { ctx.beginPath(); ctx.moveTo(L, Yp(v) + .5); ctx.lineTo(w - R, Yp(v) + .5); ctx.stroke(); ctx.fillText(v.toFixed(2), L - 8, Yp(v)); }
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let f = 2.6; f < 3.15; f += 0.1) { ctx.beginPath(); ctx.moveTo(X(f) + .5, T); ctx.lineTo(X(f) + .5, h - Bm); ctx.stroke(); if (w > 420 || Math.round(f * 10) % 2 === 0) ctx.fillText(f.toFixed(1), X(f), h - Bm + 7); }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(w > 420 ? 'Normalised fluorescence against microwave frequency (GHz)' : 'Fluorescence against frequency (GHz)', 12, 16);
+    // resonance markers
+    ctx.setLineDash([3, 4]); ctx.strokeStyle = '#6a176e';
+    for (const f of [D - GAM * B, D + GAM * B]) { ctx.beginPath(); ctx.moveTo(X(f), T); ctx.lineTo(X(f), h - Bm); ctx.stroke(); }
+    ctx.setLineDash([]);
+    // trace
+    const g = ctx.createLinearGradient(0, Yp(1.0), 0, Yp(1 - 2 * C));
+    g.addColorStop(0, rgb(0.52)); g.addColorStop(0.45, rgb(0.74)); g.addColorStop(1, rgb(0.95));
+    ctx.strokeStyle = g; ctx.lineWidth = 1.8; ctx.lineJoin = 'round'; ctx.beginPath();
+    let pen = false;
+    for (let i = 0; i < N; i++) {
+      if (!cnt[i]) { pen = false; continue; }
+      const x = X(fOf(i)), y = Yp(Math.max(Y0, Math.min(Y1, avg[i])));
+      if (pen) ctx.lineTo(x, y); else { ctx.moveTo(x, y); pen = true; }
+    }
+    ctx.stroke();
+    if (!reduce) { const x = X(fOf(idx)); ctx.strokeStyle = 'rgba(252,255,164,.55)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, T); ctx.lineTo(x, h - Bm); ctx.stroke(); }
+  }
+  function frame(){ raf = 0; acquire(4); draw(); $('#odmr-n').textContent = sweeps; if (visible && !document.hidden) raf = requestAnimationFrame(frame); }
+  const kick = () => { if (reduce) { draw(); reads(); } else if (!raf) raf = requestAnimationFrame(frame); };
+  slider.addEventListener('input', () => { B = +slider.value; if (reduce) still(); else reset(); reads(); kick(); });
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && visible) kick(); });
+  new ResizeObserver(draw).observe(cv);
+  still();
+  reads(); draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+
+/* ---------- measured field map ---------- */
+const FIELD=[[-25,-25,331,3],[-25,-20,41,3],[-25,-15,50,4],[-25,-10,62,4],[-25,-5,74,4],[-25,0,95,5],[-25,5,111,4],[-25,10,127,3],[-25,15,135,3],[-25,20,140,4],[-25,25,184,3],[-20,-25,7,5],[-20,-20,0,7],[-20,-15,30,9],[-20,-10,43,7],[-20,-5,65,8],[-20,0,90,8],[-20,5,100,6],[-20,10,124,6],[-20,15,156,7],[-20,20,179,6],[-20,25,190,6],[-15,-25,354,13],[-15,-20,348,13],[-15,-15,12,16],[-15,-10,29,15],[-15,-5,61,15],[-15,0,91,15],[-15,5,113,11],[-15,10,145,12],[-15,15,155,13],[-15,20,174,13],[-15,25,196,13],[-10,-25,312,20],[-10,-20,337,30],[-10,-15,10,37],[-10,-10,27,35],[-10,-5,54,31],[-10,0,90,28],[-10,5,122,26],[-10,10,148,25],[-10,15,165,31],[-10,20,198,40],[-10,25,225,47],[0,-25,274,27],[0,25,90,53],[10,-25,224,18],[10,-20,209,29],[10,-15,185,29],[10,-10,172,27],[10,-5,95,23],[10,0,90,22],[10,5,56,20],[10,10,36,24],[10,15,5,29],[10,20,345,37],[10,25,318,41],[15,-25,209,8],[15,-20,194,11],[15,-15,170,13],[15,-10,143,12],[15,-5,126,12],[15,0,91,12],[15,5,60,16],[15,10,37,18],[15,15,20,20],[15,20,350,19],[15,25,336,15],[20,-25,189,6],[20,-20,186,8],[20,-15,163,7],[20,-10,147,6],[20,-5,120,6],[20,0,92,8],[20,5,65,6],[20,10,50,6],[20,15,23,7],[20,20,342,8],[20,25,340,6],[25,-25,182,3],[25,-20,180,5],[25,-15,159,4],[25,-10,156,3],[25,-5,110,3],[25,0,90,4],[25,5,81,5],[25,10,44,5],[25,15,29,5],[25,20,22,5],[25,25,355,4]];
+(() => {
+  const cv = $('#field-plot'); if (!cv) return;
+  const read = $('#field-read'), idle = read.innerHTML;
+  const tOf = m => 0.24 + 0.76 * Math.log(m / 3) / Math.log(53 / 3);
+  let hover = -1, geo = null;
+  const neg = v => (v < 0 ? '−' + (-v) : '' + v);
+  function draw(){
+    const { ctx, w, h } = fit(cv);
+    const L = 34, R = 10, T = 10, Bm = 26, pw = w - L - R, ph = h - T - Bm, S = 29.5;
+    const X = x => L + (x + S) / (2 * S) * pw, Y = y => T + (S - y) / (2 * S) * ph, u = pw / (2 * S);
+    geo = { X, Y };
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = FONT; ctx.lineWidth = 1; ctx.strokeStyle = GRID; ctx.fillStyle = DIM;
+    for (let v = -20; v <= 20; v += 10) {
+      ctx.beginPath(); ctx.moveTo(X(v) + .5, T); ctx.lineTo(X(v) + .5, h - Bm); ctx.moveTo(L, Y(v) + .5); ctx.lineTo(w - R, Y(v) + .5); ctx.stroke();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText(neg(v), X(v), h - Bm + 6);
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(neg(v), L - 7, Y(v));
+    }
+    // the magnet sits where the probe could not reach
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = '#6b5878';
+    ctx.strokeRect(X(-6), Y(21), X(6) - X(-6), Y(-21) - Y(21)); ctx.setLineDash([]);
+    ctx.save(); ctx.translate(X(0), Y(0)); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#6b5878'; ctx.fillText('magnet', 0, 0); ctx.restore();
+    const len = 3.7 * u;
+    FIELD.forEach((p, i) => {
+      const a = p[2] * Math.PI / 180, cx = X(p[0]), cy = Y(p[1]), dx = Math.cos(a), dy = -Math.sin(a), on = i === hover;
+      const x0 = cx - dx * len / 2, y0 = cy - dy * len / 2, x1 = cx + dx * len / 2, y1 = cy + dy * len / 2;
+      ctx.strokeStyle = on ? '#fff' : rgb(tOf(p[3]));
+      ctx.lineWidth = on ? 3.4 : Math.max(2, u * 0.42); ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      if (on) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(cx, cy, len * 0.72, 0, 6.2832); ctx.stroke(); }
+    });
+  }
+  function pick(e){
+    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    let best = -1, bd = 26 * 26;
+    FIELD.forEach((p, i) => { const dx = geo.X(p[0]) - mx, dy = geo.Y(p[1]) - my, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } });
+    if (best !== hover) {
+      hover = best; draw();
+      if (best < 0) read.innerHTML = idle;
+      else { const p = FIELD[best]; read.innerHTML = `<strong>${p[3]} mT, lying at ${p[2] % 180}°</strong> to the x-axis, at grid position (${neg(p[0])}, ${neg(p[1])}).`; }
+    }
+  }
+  cv.addEventListener('pointermove', pick); cv.addEventListener('pointerdown', pick);
+  cv.addEventListener('pointerleave', () => { if (hover !== -1) { hover = -1; draw(); read.innerHTML = idle; } });
+  new ResizeObserver(draw).observe(cv);
+  draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+
+/* ---------- VSM lock-in data ---------- */
+const VSM=[[10,0.1],[20,2.1],[80,14],[90,15.5],[90,18.6],[90,22.6],[110,4.3],[120,4.8],[130,5.5],[140,5.7],[150,6.4],[160,5.5],[170,4.4],[180,4.5],[190,4.7],[200,5.2],[270,6.6],[300,7],[350,7.6],[401.5,8.8],[440,18.9],[480,15],[500,5.6],[530,9.2],[560,10.7],[600,12.8],[680,11.7],[734,12.1],[800,12.9],[900,15.3],[1000,15.9],[1100,16],[1500,21.4],[1900,26.2],[2500,29.3],[3000,37.7]];
+(() => {
+  const cv = $('#vsm-plot'); if (!cv) return;
+  const read = $('#vsm-read'), idle = read.innerHTML;
+  let hover = -1, geo = null;
+  function draw(){
+    const { ctx, w, h } = fit(cv);
+    const L = 40, R = 16, T = 26, Bm = 30, pw = w - L - R, ph = h - T - Bm, XM = 3000, YM = 40;
+    const X = f => L + f / XM * pw, Y = v => T + (1 - v / YM) * ph;
+    geo = { X, Y };
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = FONT; ctx.lineWidth = 1; ctx.strokeStyle = GRID; ctx.fillStyle = DIM;
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let v = 0; v <= YM; v += 10) { ctx.beginPath(); ctx.moveTo(L, Y(v) + .5); ctx.lineTo(w - R, Y(v) + .5); ctx.stroke(); ctx.fillText(v, L - 8, Y(v)); }
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let f = 0; f <= XM; f += 500) { if (w > 420 || f % 1000 === 0) ctx.fillText(f, X(f), h - Bm + 8); }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(w > 420 ? 'Lock-in signal (mV) against drive frequency (Hz)' : 'Signal (mV) against frequency (Hz)', 12, 16);
+    const g = ctx.createLinearGradient(0, Y(0), 0, Y(YM));
+    g.addColorStop(0, rgb(0.34)); g.addColorStop(0.5, rgb(0.66)); g.addColorStop(1, rgb(0.96));
+    const fill = ctx.createLinearGradient(0, Y(YM), 0, Y(0));
+    fill.addColorStop(0, 'rgba(243,120,25,.20)'); fill.addColorStop(1, 'rgba(106,23,110,0)');
+    ctx.beginPath(); VSM.forEach((p, i) => i ? ctx.lineTo(X(p[0]), Y(p[1])) : ctx.moveTo(X(p[0]), Y(p[1])));
+    ctx.lineTo(X(VSM[VSM.length - 1][0]), Y(0)); ctx.lineTo(X(VSM[0][0]), Y(0)); ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+    ctx.beginPath(); VSM.forEach((p, i) => i ? ctx.lineTo(X(p[0]), Y(p[1])) : ctx.moveTo(X(p[0]), Y(p[1])));
+    ctx.strokeStyle = g; ctx.lineWidth = 1.8; ctx.lineJoin = 'round'; ctx.stroke();
+    VSM.forEach((p, i) => {
+      const on = i === hover;
+      ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), on ? 5 : 2.6, 0, 6.2832);
+      ctx.fillStyle = on ? '#fff' : rgb(0.34 + 0.62 * p[1] / YM); ctx.fill();
+    });
+    if (hover >= 0) { const p = VSM[hover]; ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(p[0]) + .5, Y(p[1]) + 6); ctx.lineTo(X(p[0]) + .5, Y(0)); ctx.stroke(); }
+  }
+  function pick(e){
+    const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    let best = -1, bd = Infinity;
+    VSM.forEach((p, i) => { const dx = geo.X(p[0]) - mx, dy = (geo.Y(p[1]) - my) * 0.35, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } });
+    if (best !== hover) { hover = best; draw(); const p = VSM[best]; read.innerHTML = `<strong>${p[1]} mV at ${p[0]} Hz.</strong> Lock-in reading at the vibration frequency.`; }
+  }
+  cv.addEventListener('pointermove', pick); cv.addEventListener('pointerdown', pick);
+  cv.addEventListener('pointerleave', () => { hover = -1; draw(); read.innerHTML = idle; });
+  new ResizeObserver(draw).observe(cv);
+  draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+
+/* ---------- lightbox ---------- */
+(() => {
+  const dlg = $('#lightbox'); if (!dlg || !dlg.showModal) return;
+  const img = $('img', dlg), cap = $('p', dlg);
+  $$('.zoom').forEach(b => b.addEventListener('click', () => {
+    const i = $('img', b), f = b.closest('figure');
+    img.src = i.currentSrc || i.src; img.alt = i.alt;
+    cap.textContent = f ? $('figcaption', f).textContent : '';
+    dlg.showModal();
+  }));
+  dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('.close') || e.target === img) dlg.close(); });
+})();
+
+/* ---------- in-page links, copy, scroll scale ---------- */
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
+  e.preventDefault(); t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+}));
+$$('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+  const v = b.dataset.copy, old = b.dataset.label || (b.dataset.label = b.textContent);
+  try { await navigator.clipboard.writeText(v); b.textContent = 'Copied'; }
+  catch (_) { b.textContent = v; }
+  setTimeout(() => { b.textContent = old; }, 2200);
+}));
+(() => {
+  const ids = ['top', 'approach', 'research', 'projects', 'toolkit', 'education', 'contact'];
+  const secs = ids.map(id => document.getElementById(id));
+  const ticks = $$('#spine-ticks li'), mark = $('#spine-mark'), bar = $('#progress'), navs = $$('.nav nav a');
+  const root = document.documentElement;
+  let max = 1, queued = false;
+  function layout(){
+    max = Math.max(1, root.scrollHeight - innerHeight);
+    ticks.forEach((t, i) => { const y = secs[i].getBoundingClientRect().top + scrollY; t.style.top = Math.min(100, y / max * 100) + '%'; });
+    update();
+  }
+  function update(){
+    queued = false;
+    const f = Math.min(1, Math.max(0, scrollY / max));
+    mark.style.top = f * 100 + '%'; bar.style.transform = `scaleX(${f})`;
+    root.style.setProperty('--heat', rgb(0.36 + 0.56 * f));
+    let cur = 0;
+    secs.forEach((s, i) => { if (s.getBoundingClientRect().top <= innerHeight * 0.38) cur = i; });
+    if (scrollY >= max - 2) cur = secs.length - 1;
+    ticks.forEach((t, i) => t.firstElementChild.setAttribute('aria-current', i === cur));
+    navs.forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + ids[cur]));
+  }
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener('resize', layout); addEventListener('load', layout);
+  new ResizeObserver(layout).observe(document.body);
+  layout();
+})();
+})();
+</script>
+</body>
+</html>
