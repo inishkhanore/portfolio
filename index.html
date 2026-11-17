@@ -1010,7 +1010,6 @@ const FIELD=[[-25,-25,29,3,0],[-25,-20,319,3,2],[-25,-15,310,4,2],[-25,-10,298,4
       ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1 - dx * hd * 0.6, y1 - dy * hd * 0.6); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x1 - dx * hd - dy * hd * 0.5, y1 - dy * hd + dx * hd * 0.5); ctx.lineTo(x1 - dx * hd + dy * hd * 0.5, y1 - dy * hd - dx * hd * 0.5); ctx.closePath(); ctx.fill();
       ctx.globalAlpha = 1;
-      if (p[4] === 1 && !on) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(246,215,70,.75)'; ctx.beginPath(); ctx.arc(cx, cy, len * 0.68, 0, 6.2832); ctx.stroke(); }
       if (on) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(cx, cy, len * 0.72, 0, 6.2832); ctx.stroke(); }
     });
   }
