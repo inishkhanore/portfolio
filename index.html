@@ -458,7 +458,7 @@ footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
               <div class="lab-head"><strong>The measured field</strong><span>90 readings, cleaned dataset</span></div>
               <canvas id="field-plot" role="img" aria-label="Measured magnetic field around a bar magnet: 90 arrows on a grid showing field direction, coloured by field strength."></canvas>
               <div class="legend"><span>3 mT</span><i></i><span>40 mT</span></div>
-              <p class="lab-foot" id="field-read">Arrows show the field direction, coloured by strength on a log scale. Ringed points were corrected from another original file; faint ones are weak-field readings near the meter’s last digit. Hover or tap to read a point.</p>
+              <p class="lab-foot" id="field-read">Arrows show the field direction, coloured by strength on a log scale. Faint ones are weak-field readings near the meter’s last digit. Hover or tap to read a point.</p>
             </div>
           </div>
         </div>
@@ -1021,7 +1021,7 @@ const FIELD=[[-25,-25,29,3,0],[-25,-20,319,3,2],[-25,-15,310,4,2],[-25,-10,298,4
     if (best !== hover) {
       hover = best; draw();
       if (best < 0) read.innerHTML = idle;
-      else { const p = FIELD[best]; read.innerHTML = `<strong>${p[3]} mT, pointing ${p[2]}°</strong> counter-clockwise from +x, at (${neg(p[0])}, ${neg(p[1])}) mm.` + (p[4] === 1 ? ' Corrected from another original file.' : p[4] === 2 ? ' Weak-field reading, low confidence.' : ''); }
+      else { const p = FIELD[best]; read.innerHTML = `<strong>${p[3]} mT, pointing ${p[2]}°</strong> counter-clockwise from +x, at (${neg(p[0])}, ${neg(p[1])}) mm.` + (p[4] === 1 ? ' ' : p[4] === 2 ? ' Weak-field reading, low confidence.' : ''); }
     }
   }
   cv.addEventListener('pointermove', pick); cv.addEventListener('pointerdown', pick);
