@@ -207,6 +207,7 @@ dl{margin:0}
 .figs figure{margin:0;grid-column:span 4;min-width:0}
 .figs .s3{grid-column:span 3}
 .figs .s5{grid-column:span 5}
+.figs .s6{grid-column:span 6}
 .figs .s8{grid-column:span 8}
 .zoom{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:4px;background:#000;overflow:hidden;cursor:zoom-in;aspect-ratio:var(--ar,4/3)}
 .zoom:hover{border-color:var(--line-strong)}
@@ -215,7 +216,7 @@ dl{margin:0}
 .figs figcaption{margin-top:8px;font-size:.86rem;line-height:1.4;color:var(--muted)}
 @media (max-width:900px){.figs .s3{grid-column:span 6}}
 @media (max-width:640px){
-  .figs figure,.figs .s5,.figs .s8{grid-column:span 12}
+  .figs figure,.figs .s5,.figs .s6,.figs .s8{grid-column:span 12}
   .figs .s3,.figs .half-sm{grid-column:span 6}
 }
 dialog{padding:0;border:1px solid var(--line-strong);border-radius:8px;background:#000;color:var(--text);max-width:min(1100px,94vw);max-height:92vh}
@@ -312,6 +313,7 @@ footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <p class="hero-lede">I study physics and I build the apparatus. So far that has meant NV-centre magnetometry, microwave signal generation, finite-element simulation, and the code and hardware that hold an experiment together.</p>
       <div class="actions">
         <a class="btn primary" href="#research">See the research</a>
+        <a class="btn" href="cv.pdf" target="_blank" rel="noopener">Open my CV (PDF)</a>
         <button class="btn" type="button" data-copy="inishy23@iiserbpr.ac.in">Copy email address</button>
       </div>
       <p class="hero-note">Abstract accepted at <a href="#fieldmap">COMSOL Conference 2026, Bengaluru</a>, on simulating a bar magnet and validating it with a gaussmeter.</p>
@@ -411,9 +413,8 @@ footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       </div>
 
       <div class="figs">
-        <figure><button class="zoom" type="button" style="--ar:4/3"><img src="img/shfsg-bench.jpg" alt="Zurich Instruments SHFSG+ signal generator on a lab bench beside a spectrum analyser and an oscilloscope" loading="lazy"></button><figcaption>The SHFSG+ with a spectrum analyser and an oscilloscope on its outputs.</figcaption></figure>
-        <figure><button class="zoom plot" type="button" style="--ar:4/3"><img src="img/labview-odmr.jpg" alt="LabVIEW charts of fluorescence against microwave frequency showing two resonance dips" loading="lazy"></button><figcaption>An ODMR sweep on the LabVIEW front panel: two dips, either side of 2.87 GHz.</figcaption></figure>
-        <figure><button class="zoom" type="button" style="--ar:4/3;--pos:50% 62%"><img src="img/odmr-setup.jpg" alt="Optics for the ODMR experiment mounted on an optical table" loading="lazy"></button><figcaption>The ODMR setup on the optical table.</figcaption></figure>
+        <figure class="s6"><button class="zoom" type="button" style="--ar:4/3"><img src="img/shfsg-bench.jpg" alt="Zurich Instruments SHFSG+ signal generator on a lab bench beside a spectrum analyser and an oscilloscope" loading="lazy"></button><figcaption>The SHFSG+ with a spectrum analyser and an oscilloscope on its outputs.</figcaption></figure>
+        <figure class="s6"><button class="zoom plot" type="button" style="--ar:4/3"><img src="img/labview-odmr.jpg" alt="LabVIEW charts of fluorescence against microwave frequency showing two resonance dips" loading="lazy"></button><figcaption>An ODMR sweep on the LabVIEW front panel: two dips, either side of 2.87 GHz.</figcaption></figure>
       </div>
 
       <div class="part">
@@ -452,11 +453,12 @@ footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
           <div class="half build">
             <h5>The build</h5>
             <p>I automated the gauss probe in LabVIEW and mapped the field point by point. Each of the 90 readings is a position, an angle and a field strength.</p>
+            <p>In November 2026 I went back to the raw files and rebuilt the dataset. Four angle grids existed for the same points; I checked each against a two-pole model of the magnet, kept the one that fits (10° rms after cleaning), and fixed three points using readings from other original files. Nothing in it is model-generated.</p>
             <div class="lab">
-              <div class="lab-head"><strong>The measured field</strong><span>90 gaussmeter readings</span></div>
-              <canvas id="field-plot" role="img" aria-label="Measured magnetic field around a bar magnet: 90 ticks on a grid, each lying along the field at that point and coloured by field strength."></canvas>
-              <div class="legend"><span>3 mT</span><i></i><span>53 mT</span></div>
-              <p class="lab-foot" id="field-read">Each tick lies along the field at that point, and its colour is the field strength on a log scale. Hover or tap one to read it.</p>
+              <div class="lab-head"><strong>The measured field</strong><span>90 readings, cleaned dataset</span></div>
+              <canvas id="field-plot" role="img" aria-label="Measured magnetic field around a bar magnet: 90 arrows on a grid showing field direction, coloured by field strength."></canvas>
+              <div class="legend"><span>3 mT</span><i></i><span>40 mT</span></div>
+              <p class="lab-foot" id="field-read">Arrows show the field direction, coloured by strength on a log scale. Ringed points were corrected from another original file; faint ones are weak-field readings near the meter’s last digit. Hover or tap to read a point.</p>
             </div>
           </div>
         </div>
@@ -632,6 +634,7 @@ footer .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <button class="btn" type="button" data-copy="inishy23@iiserbpr.ac.in">Copy</button>
     </div>
     <div class="elsewhere">
+      <a class="btn primary" href="cv.pdf" target="_blank" rel="noopener">CV (PDF)</a>
       <a class="btn" href="https://github.com/inishkhanore" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="https://www.linkedin.com/in/inish-khanore-a43b73287/" target="_blank" rel="noopener">LinkedIn</a>
       <a class="btn" href="https://grabcad.com/inish.khanore-2" target="_blank" rel="noopener">GrabCAD</a>
@@ -974,11 +977,11 @@ const hero = (() => {
 })();
 
 /* ---------- measured field map ---------- */
-const FIELD=[[-25,-25,331,3],[-25,-20,41,3],[-25,-15,50,4],[-25,-10,62,4],[-25,-5,74,4],[-25,0,95,5],[-25,5,111,4],[-25,10,127,3],[-25,15,135,3],[-25,20,140,4],[-25,25,184,3],[-20,-25,7,5],[-20,-20,0,7],[-20,-15,30,9],[-20,-10,43,7],[-20,-5,65,8],[-20,0,90,8],[-20,5,100,6],[-20,10,124,6],[-20,15,156,7],[-20,20,179,6],[-20,25,190,6],[-15,-25,354,13],[-15,-20,348,13],[-15,-15,12,16],[-15,-10,29,15],[-15,-5,61,15],[-15,0,91,15],[-15,5,113,11],[-15,10,145,12],[-15,15,155,13],[-15,20,174,13],[-15,25,196,13],[-10,-25,312,20],[-10,-20,337,30],[-10,-15,10,37],[-10,-10,27,35],[-10,-5,54,31],[-10,0,90,28],[-10,5,122,26],[-10,10,148,25],[-10,15,165,31],[-10,20,198,40],[-10,25,225,47],[0,-25,274,27],[0,25,90,53],[10,-25,224,18],[10,-20,209,29],[10,-15,185,29],[10,-10,172,27],[10,-5,95,23],[10,0,90,22],[10,5,56,20],[10,10,36,24],[10,15,5,29],[10,20,345,37],[10,25,318,41],[15,-25,209,8],[15,-20,194,11],[15,-15,170,13],[15,-10,143,12],[15,-5,126,12],[15,0,91,12],[15,5,60,16],[15,10,37,18],[15,15,20,20],[15,20,350,19],[15,25,336,15],[20,-25,189,6],[20,-20,186,8],[20,-15,163,7],[20,-10,147,6],[20,-5,120,6],[20,0,92,8],[20,5,65,6],[20,10,50,6],[20,15,23,7],[20,20,342,8],[20,25,340,6],[25,-25,182,3],[25,-20,180,5],[25,-15,159,4],[25,-10,156,3],[25,-5,110,3],[25,0,90,4],[25,5,81,5],[25,10,44,5],[25,15,29,5],[25,20,22,5],[25,25,355,4]];
+const FIELD=[[-25,-25,29,3,0],[-25,-20,319,3,2],[-25,-15,310,4,2],[-25,-10,298,4,2],[-25,-5,286,4,0],[-25,0,265,5,0],[-25,5,249,4,0],[-25,10,233,3,0],[-25,15,225,3,0],[-25,20,220,4,2],[-25,25,176,3,0],[-20,-25,353,5,2],[-20,-20,0,7,0],[-20,-15,330,9,0],[-20,-10,317,7,0],[-20,-5,295,8,0],[-20,0,270,8,0],[-20,5,260,6,0],[-20,10,236,6,0],[-20,15,204,7,0],[-20,20,181,6,0],[-20,25,170,6,0],[-15,-25,6,13,2],[-15,-20,12,13,0],[-15,-15,348,16,0],[-15,-10,331,15,0],[-15,-5,299,15,0],[-15,0,269,15,0],[-15,5,247,11,0],[-15,10,215,12,0],[-15,15,205,13,0],[-15,20,186,13,0],[-15,25,164,13,0],[-10,-25,48,20,0],[-10,-20,23,30,0],[-10,-15,350,37,0],[-10,-10,333,35,0],[-10,-5,306,31,0],[-10,0,270,28,0],[-10,5,238,26,0],[-10,10,212,25,0],[-10,15,195,31,0],[-10,20,162,40,0],[-10,25,135,21,1],[0,-25,86,27,0],[0,25,90,29,1],[10,-25,136,18,0],[10,-20,151,29,0],[10,-15,175,29,0],[10,-10,216,27,1],[10,-5,233,23,1],[10,0,270,22,0],[10,5,304,20,0],[10,10,324,24,0],[10,15,355,29,0],[10,20,15,37,0],[10,25,42,20,1],[15,-25,151,8,0],[15,-20,166,11,0],[15,-15,190,13,0],[15,-10,217,12,0],[15,-5,234,12,0],[15,0,269,12,0],[15,5,300,16,0],[15,10,323,18,0],[15,15,340,20,0],[15,20,10,19,0],[15,25,24,15,0],[20,-25,171,6,0],[20,-20,174,8,0],[20,-15,197,7,0],[20,-10,213,6,0],[20,-5,240,6,0],[20,0,268,8,0],[20,5,295,6,0],[20,10,310,6,0],[20,15,337,7,0],[20,20,18,8,0],[20,25,20,6,0],[25,-25,178,3,0],[25,-20,180,5,0],[25,-15,201,4,0],[25,-10,204,3,0],[25,-5,250,3,0],[25,0,270,4,0],[25,5,279,5,0],[25,10,316,5,0],[25,15,331,5,0],[25,20,338,5,0],[25,25,5,4,0]];
 (() => {
   const cv = $('#field-plot'); if (!cv) return;
   const read = $('#field-read'), idle = read.innerHTML;
-  const tOf = m => 0.24 + 0.76 * Math.log(m / 3) / Math.log(53 / 3);
+  const tOf = m => 0.24 + 0.76 * Math.log(m / 3) / Math.log(40 / 3);
   let hover = -1, geo = null;
   const neg = v => (v < 0 ? '−' + (-v) : '' + v);
   function draw(){
@@ -1000,10 +1003,14 @@ const FIELD=[[-25,-25,331,3],[-25,-20,41,3],[-25,-15,50,4],[-25,-10,62,4],[-25,-
     const len = 3.7 * u;
     FIELD.forEach((p, i) => {
       const a = p[2] * Math.PI / 180, cx = X(p[0]), cy = Y(p[1]), dx = Math.cos(a), dy = -Math.sin(a), on = i === hover;
-      const x0 = cx - dx * len / 2, y0 = cy - dy * len / 2, x1 = cx + dx * len / 2, y1 = cy + dy * len / 2;
-      ctx.strokeStyle = on ? '#fff' : rgb(tOf(p[3]));
-      ctx.lineWidth = on ? 3.4 : Math.max(2, u * 0.42); ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      const x0 = cx - dx * len / 2, y0 = cy - dy * len / 2, x1 = cx + dx * len / 2, y1 = cy + dy * len / 2, hd = Math.max(4.5, len * 0.36);
+      ctx.globalAlpha = on ? 1 : p[4] === 2 ? 0.45 : 1;
+      ctx.strokeStyle = ctx.fillStyle = on ? '#fff' : rgb(tOf(p[3]));
+      ctx.lineWidth = on ? 2.8 : Math.max(1.6, u * 0.3); ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1 - dx * hd * 0.6, y1 - dy * hd * 0.6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x1 - dx * hd - dy * hd * 0.5, y1 - dy * hd + dx * hd * 0.5); ctx.lineTo(x1 - dx * hd + dy * hd * 0.5, y1 - dy * hd - dx * hd * 0.5); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+      if (p[4] === 1 && !on) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(246,215,70,.75)'; ctx.beginPath(); ctx.arc(cx, cy, len * 0.68, 0, 6.2832); ctx.stroke(); }
       if (on) { ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(cx, cy, len * 0.72, 0, 6.2832); ctx.stroke(); }
     });
   }
@@ -1014,7 +1021,7 @@ const FIELD=[[-25,-25,331,3],[-25,-20,41,3],[-25,-15,50,4],[-25,-10,62,4],[-25,-
     if (best !== hover) {
       hover = best; draw();
       if (best < 0) read.innerHTML = idle;
-      else { const p = FIELD[best]; read.innerHTML = `<strong>${p[3]} mT, lying at ${p[2] % 180}°</strong> to the x-axis, at grid position (${neg(p[0])}, ${neg(p[1])}).`; }
+      else { const p = FIELD[best]; read.innerHTML = `<strong>${p[3]} mT, pointing ${p[2]}°</strong> counter-clockwise from +x, at (${neg(p[0])}, ${neg(p[1])}) mm.` + (p[4] === 1 ? ' Corrected from another original file.' : p[4] === 2 ? ' Weak-field reading, low confidence.' : ''); }
     }
   }
   cv.addEventListener('pointermove', pick); cv.addEventListener('pointerdown', pick);
